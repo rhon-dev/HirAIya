@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String     @id @default(cuid())
+  name      String
+  email     String     @unique
+  role      Role       @default(MEMBER)
+  feedbacks Feedback[]
+  comments  Comment[]
+  votes     Vote[]
+  createdAt DateTime   @default(now())
+}
+
+enum Role {
+  ADMIN
+  MEMBER
+}
+
+model Feedback {
+  id          String         @id @default(cuid())
+  title       String
+  description String
+  category    Category
+  status      Status         @default(SUGGESTION)
+  authorId    String
+  author      User           @relation(fields: [authorId], references: [id])
+  votes       Vote[]
+  comments    Comment[]
+  statusLog   StatusChange[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+}
+
+enum Category {
+  UI
+  UX
+  FEATURE
+  BUG
+  ENHANCEMENT
+}
+
+enum Status {
+  SUGGESTION
+  PLANNED
+  IN_PROGRESS
+  LIVE
+}
+
+model Vote {
+  id         String   @id @default(cuid())
+  userId     String
+  feedbackId String
+  user       User     @relation(fields: [userId], references: [id])
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+
+  @@unique([userId, feedbackId])
+}
+
+model Comment {
+  id         String    @id @default(cuid())
+  content    String
+  authorId   String
+  feedbackId String
+  parentId   String?
+  author     User      @relation(fields: [authorId], references: [id])
+  feedback   Feedback  @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  parent     Comment?  @relation("Replies", fields: [parentId], references: [id])
+  replies    Comment[] @relation("Replies")
+  createdAt  DateTime  @default(now())
+}
+
+model StatusChange {
+  id         String   @id @default(cuid())
+  feedbackId String
+  feedback   Feedback @relation(fields: [feedbackId], references: [id], onDelete: Cascade)
+  fromStatus Status
+  toStatus   Status
+  changedBy  String
+  createdAt  DateTime @default(now())
+}
