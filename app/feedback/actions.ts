@@ -1,7 +1,6 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser, canModify } from "@/lib/auth";
 import { feedbackSchema, type FeedbackInput } from "@/lib/validation";
@@ -21,7 +20,6 @@ export async function createFeedback(input: FeedbackInput): Promise<ActionResult
   });
 
   revalidatePath("/");
-  redirect("/");
 }
 
 export async function updateFeedback(
@@ -43,7 +41,7 @@ export async function updateFeedback(
   await prisma.feedback.update({ where: { id }, data: parsed.data });
 
   revalidatePath("/");
-  redirect("/");
+  revalidatePath(`/feedback/${id}`);
 }
 
 export async function changeStatus(

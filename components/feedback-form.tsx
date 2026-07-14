@@ -1,6 +1,7 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
@@ -27,6 +28,7 @@ export function FeedbackForm({
   defaultValues?: Partial<FeedbackInput>;
   submitLabel: string;
 }) {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const {
     register,
@@ -45,8 +47,12 @@ export function FeedbackForm({
   function onSubmit(input: FeedbackInput) {
     startTransition(async () => {
       const result = await action(input);
-      if (result?.error) toast.error(result.error);
-      // On success the action redirects, so no toast is needed here.
+      if (result?.error) {
+        toast.error(result.error);
+      } else {
+        toast.success("Feedback saved");
+        router.push("/");
+      }
     });
   }
 

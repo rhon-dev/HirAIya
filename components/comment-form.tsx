@@ -34,6 +34,7 @@ export function CommentForm({
       if (result?.error) {
         toast.error(result.error);
       } else {
+        toast.success("Comment posted");
         formRef.current?.reset();
         onDone?.();
       }
