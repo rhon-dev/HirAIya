@@ -13,13 +13,13 @@ async function main() {
   await prisma.user.deleteMany();
 
   const admin = await prisma.user.create({
-    data: { name: "Alex Admin", email: "alex@loopboard.dev", role: "ADMIN" },
+    data: { name: "Alex Admin", email: "alex@hiraiya.dev", role: "ADMIN" },
   });
   const member1 = await prisma.user.create({
-    data: { name: "Mia Member", email: "mia@loopboard.dev", role: "MEMBER" },
+    data: { name: "Mia Member", email: "mia@hiraiya.dev", role: "MEMBER" },
   });
   const member2 = await prisma.user.create({
-    data: { name: "Sam Member", email: "sam@loopboard.dev", role: "MEMBER" },
+    data: { name: "Sam Member", email: "sam@hiraiya.dev", role: "MEMBER" },
   });
 
   const authors = [admin, member1, member2];
