@@ -80,7 +80,12 @@ export default async function BoardPage({
                 <div className="min-w-0 flex-1 space-y-2">
                   <div className="flex items-start justify-between gap-2">
                     <h3 className="font-semibold leading-snug">
-                      {feedback.title}
+                      <Link
+                        href={`/feedback/${feedback.id}`}
+                        className="hover:underline"
+                      >
+                        {feedback.title}
+                      </Link>
                     </h3>
                     {canModify(currentUser, feedback) && (
                       <div className="flex shrink-0 items-center gap-1">
