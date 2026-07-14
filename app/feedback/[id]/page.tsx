@@ -10,6 +10,7 @@ import { DeleteFeedbackButton } from "@/components/delete-feedback-button";
 import { VoteButton } from "@/components/vote-button";
 import { CommentForm } from "@/components/comment-form";
 import { CommentThread, type CommentNode } from "@/components/comment-thread";
+import { StatusSelect } from "@/components/status-select";
 
 export default async function FeedbackDetailPage({
   params,
@@ -91,7 +92,11 @@ export default async function FeedbackDetailPage({
             </p>
             <div className="flex flex-wrap items-center gap-2">
               <CategoryBadge category={feedback.category} />
-              <StatusBadge status={feedback.status} />
+              {currentUser.role === "ADMIN" ? (
+                <StatusSelect feedbackId={feedback.id} status={feedback.status} />
+              ) : (
+                <StatusBadge status={feedback.status} />
+              )}
               <span className="ml-auto text-xs text-muted-foreground">
                 {feedback.author.name} ·{" "}
                 {feedback.createdAt.toLocaleDateString()}

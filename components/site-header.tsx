@@ -13,9 +13,24 @@ export async function SiteHeader() {
   return (
     <header className="border-b">
       <div className="mx-auto flex h-14 max-w-4xl items-center justify-between gap-4 px-4">
-        <Link href="/" className="font-semibold tracking-tight">
-          HirAIya
-        </Link>
+        <div className="flex items-center gap-6">
+          <Link href="/" className="font-semibold tracking-tight">
+            HirAIya
+          </Link>
+          <nav className="flex items-center gap-4 text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-foreground">
+              Board
+            </Link>
+            <Link href="/roadmap" className="hover:text-foreground">
+              Roadmap
+            </Link>
+            {currentUser.role === "ADMIN" && (
+              <Link href="/admin" className="hover:text-foreground">
+                Admin
+              </Link>
+            )}
+          </nav>
+        </div>
         <div className="flex items-center gap-2">
           <Button asChild size="sm">
             <Link href="/feedback/new">New feedback</Link>
