@@ -1,27 +1,37 @@
 import { z } from "zod";
 
-export const feedbackSchema = z.object({
-  title: z
+export const moodEntrySchema = z.object({
+  mood: z
+    .number()
+    .int()
+    .min(1, "Mood is required")
+    .max(5, "Mood is required"),
+  sleepHours: z
+    .number()
+    .min(0, "Sleep hours must be between 0 and 24")
+    .max(24, "Sleep hours must be between 0 and 24"),
+  feelings: z.array(z.string()).default([]),
+  reflection: z
     .string()
-    .min(5, "Title must be at least 5 characters")
-    .max(100, "Title must be at most 100 characters"),
-  description: z
-    .string()
-    .min(10, "Description must be at least 10 characters")
-    .max(1000, "Description must be at most 1000 characters"),
-  category: z.enum(["UI", "UX", "FEATURE", "BUG", "ENHANCEMENT"], {
-    message: "Category is required",
-  }),
+    .max(2000, "Reflection must be at most 2000 characters")
+    .optional()
+    .or(z.literal("")),
 });
 
-export type FeedbackInput = z.infer<typeof feedbackSchema>;
+export type MoodEntryInput = z.infer<typeof moodEntrySchema>;
 
-export const commentSchema = z.object({
-  content: z
+export const profileSchema = z.object({
+  name: z
     .string()
     .trim()
-    .min(1, "Comment cannot be empty")
-    .max(1000, "Comment must be at most 1000 characters"),
+    .min(1, "Name is required")
+    .max(100, "Name must be at most 100 characters"),
+  avatar: z
+    .string()
+    .trim()
+    .url("Avatar must be a valid URL")
+    .optional()
+    .or(z.literal("")),
 });
 
-export type CommentInput = z.infer<typeof commentSchema>;
+export type ProfileInput = z.infer<typeof profileSchema>;
