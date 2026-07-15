@@ -36,6 +36,7 @@ export function EntryDetailDialog({
                   weekday: "long",
                   month: "long",
                   day: "numeric",
+                  timeZone: "UTC",
                 })}{" "}
                 — {MOOD_EMOJI[entry.mood]} {MOOD_LABELS[entry.mood]}
               </DialogTitle>

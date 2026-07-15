@@ -21,6 +21,7 @@ export default async function TodayPage() {
             weekday: "long",
             month: "long",
             day: "numeric",
+            timeZone: "UTC",
           })}
         </p>
       </div>

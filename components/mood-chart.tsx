@@ -24,6 +24,7 @@ export function MoodChart({ entries }: { entries: MoodEntryDetail[] }) {
     label: new Date(e.date).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
+      timeZone: "UTC",
     }),
   }));
 
