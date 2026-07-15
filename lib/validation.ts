@@ -10,7 +10,7 @@ export const moodEntrySchema = z.object({
     .number()
     .min(0, "Sleep hours must be between 0 and 24")
     .max(24, "Sleep hours must be between 0 and 24"),
-  feelings: z.array(z.string()).default([]),
+  feelings: z.array(z.string()),
   reflection: z
     .string()
     .max(2000, "Reflection must be at most 2000 characters")

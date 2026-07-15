@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HirAIya",
-  description: "Public feedback board — submit, vote, and track feature requests.",
+  title: "HirAIya Mood",
+  description: "Daily mood tracking — log entries, spot trends, reflect on patterns.",
 };
 
 export default function RootLayout({
