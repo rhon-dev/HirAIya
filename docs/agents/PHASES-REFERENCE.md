@@ -4,6 +4,7 @@
 
 | Phase | Scope | Status |
 |---|---|---|
+| 0 | Scaffolding: Next.js project, Prisma ORM, PostgreSQL, shadcn/ui, seed data | Done |
 | 1 | Feedback CRUD, validation, demo-user auth | Done |
 | 2 | Optimistic voting, transaction-safe vote action, sort/filter | Done |
 | 3 | Feedback detail page, threaded comments | Done |
@@ -17,6 +18,7 @@ the first deploy and how it was fixed.
 
 | Phase | Scope | Status |
 |---|---|---|
+| 0 | Pivot setup: branch created off `main`, scope decomposed into phases, Phase 1 design spec written + approved, `docs/` reference structure added | Done |
 | 1 | Core: entry form, today's view, quotes, 11-entry chart, calendar, 5-vs-5 comparison, settings | Spec approved, implementation not started |
 | 2 | Data export (CSV/JSON) | Not started |
 | 3 | Scheduled reminder notifications | Not started |
