@@ -1,0 +1,28 @@
+# Phases Reference
+
+## Feedback platform (`main`) — complete
+
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | Feedback CRUD, validation, demo-user auth | Done |
+| 2 | Optimistic voting, transaction-safe vote action, sort/filter | Done |
+| 3 | Feedback detail page, threaded comments | Done |
+| 4 | Status workflow, roadmap kanban, admin dashboard | Done |
+| 5 | Polish: loading skeletons, toast fixes, responsive check, README | Done |
+
+Deployed to Vercel + Neon. See `docs/deployment/README.md` for the incident that broke
+the first deploy and how it was fixed.
+
+## Mood tracker (`mood-tracker`) — in progress
+
+| Phase | Scope | Status |
+|---|---|---|
+| 1 | Core: entry form, today's view, quotes, 11-entry chart, calendar, 5-vs-5 comparison, settings | Spec approved, implementation not started |
+| 2 | Data export (CSV/JSON) | Not started |
+| 3 | Scheduled reminder notifications | Not started |
+| 4 | Weather API correlation | Not started |
+| 5 | ML mood pattern insights | Not started |
+
+Spec for Phase 1: `docs/superpowers/specs/2026-07-15-mood-tracker-phase1-design.md`.
+Phases 2-5 each get their own spec when reached — see `docs/requirements/README.md` for
+why they weren't all designed up front.
