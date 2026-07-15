@@ -19,7 +19,7 @@ the first deploy and how it was fixed.
 | Phase | Scope | Status |
 |---|---|---|
 | 0 | Pivot setup: branch created off `main`, scope decomposed into phases, Phase 1 design spec written + approved, `docs/` reference structure added | Done |
-| 1 | Core: entry form, today's view, quotes, 11-entry chart, calendar, 5-vs-5 comparison, settings | Spec approved, implementation not started |
+| 1 | Core: entry form, today's view, quotes, 11-entry chart, calendar, 5-vs-5 comparison, settings | Done |
 | 2 | Data export (CSV/JSON) | Not started |
 | 3 | Scheduled reminder notifications | Not started |
 | 4 | Weather API correlation | Not started |
