@@ -24,6 +24,24 @@ Vercel (build + hosting) + Neon (database), same as `main`.
    browser only shows as a masked "digest" — don't try to debug production 500s from the
    browser console alone.
 
+## Phase 3: reminder notification env vars
+
+Web Push reminders need three env vars (local `.env` AND Vercel project settings):
+
+| Var | How to get it |
+|---|---|
+| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` | `npx web-push generate-vapid-keys` (public half) |
+| `VAPID_PRIVATE_KEY` | same command (private half) |
+| `CRON_SECRET` | any long random string, e.g. `openssl rand -hex 32` |
+
+Generate the VAPID pair ONCE and reuse it everywhere — subscriptions are bound to the
+public key, so rotating it invalidates every existing subscription.
+
+The reminder check is triggered by an external cron service (Vercel Hobby crons are
+daily-only): configure cron-job.org (free) to call
+`GET https://<deployment>/api/reminders/run?secret=<CRON_SECRET>` every hour, at
+minute 0. Non-200 responses count as failures in the cron dashboard.
+
 ## Incident log
 
 **2026-07-15 — production 500 on every route.**

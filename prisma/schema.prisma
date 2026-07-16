@@ -16,6 +16,10 @@ model User {
   avatar    String?
   entries   MoodEntry[]
   createdAt DateTime    @default(now())
+  reminderEnabled      Boolean   @default(false)
+  reminderTime         String?   // "HH:MM", 24h — e.g. "20:00"
+  timezone             String?   // IANA zone captured from the browser
+  reminderLastSentDate DateTime? // UTC-midnight date of last send — dedup guard
 }
 
 model MoodEntry {
@@ -31,4 +35,12 @@ model MoodEntry {
   updatedAt  DateTime @updatedAt
 
   @@unique([userId, date])
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
 }
