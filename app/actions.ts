@@ -69,22 +69,24 @@ export async function saveReminderSettings(
   const user = await getCurrentUser();
   const { time, timezone, subscription } = parsed.data;
 
-  await prisma.pushSubscription.upsert({
-    where: { endpoint: subscription.endpoint },
-    create: {
-      endpoint: subscription.endpoint,
-      p256dh: subscription.keys.p256dh,
-      auth: subscription.keys.auth,
-    },
-    update: {
-      p256dh: subscription.keys.p256dh,
-      auth: subscription.keys.auth,
-    },
-  });
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { reminderEnabled: true, reminderTime: time, timezone },
-  });
+  await prisma.$transaction([
+    prisma.pushSubscription.upsert({
+      where: { endpoint: subscription.endpoint },
+      create: {
+        endpoint: subscription.endpoint,
+        p256dh: subscription.keys.p256dh,
+        auth: subscription.keys.auth,
+      },
+      update: {
+        p256dh: subscription.keys.p256dh,
+        auth: subscription.keys.auth,
+      },
+    }),
+    prisma.user.update({
+      where: { id: user.id },
+      data: { reminderEnabled: true, reminderTime: time, timezone },
+    }),
+  ]);
 
   revalidatePath("/settings");
 }
@@ -98,13 +100,15 @@ export async function disableReminder(
   }
 
   const user = await getCurrentUser();
-  await prisma.pushSubscription.deleteMany({
-    where: { endpoint: parsed.data.endpoint },
-  });
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { reminderEnabled: false },
-  });
+  await prisma.$transaction([
+    prisma.pushSubscription.deleteMany({
+      where: { endpoint: parsed.data.endpoint },
+    }),
+    prisma.user.update({
+      where: { id: user.id },
+      data: { reminderEnabled: false },
+    }),
+  ]);
 
   revalidatePath("/settings");
 }
