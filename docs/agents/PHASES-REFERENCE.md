@@ -20,11 +20,12 @@ the first deploy and how it was fixed.
 |---|---|---|
 | 0 | Pivot setup: branch created off `main`, scope decomposed into phases, Phase 1 design spec written + approved, `docs/` reference structure added | Done |
 | 1 | Core: entry form, today's view, quotes, 11-entry chart, calendar, 5-vs-5 comparison, settings | Done |
-| 2 | Data export (CSV/JSON) | Not started |
+| 2 | Data export (CSV/JSON) | Done |
 | 3 | Scheduled reminder notifications | Not started |
 | 4 | Weather API correlation | Not started |
 | 5 | ML mood pattern insights | Not started |
 
 Spec for Phase 1: `docs/superpowers/specs/2026-07-15-mood-tracker-phase1-design.md`.
-Phases 2-5 each get their own spec when reached — see `docs/requirements/README.md` for
+Spec for Phase 2: `docs/superpowers/specs/2026-07-16-mood-tracker-phase2-design.md`.
+Phases 3-5 each get their own spec when reached — see `docs/requirements/README.md` for
 why they weren't all designed up front.
