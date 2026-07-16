@@ -35,3 +35,25 @@ export const profileSchema = z.object({
 });
 
 export type ProfileInput = z.infer<typeof profileSchema>;
+
+export const reminderSettingsSchema = z.object({
+  time: z
+    .string()
+    .regex(/^([01]\d|2[0-3]):[0-5]\d$/, "Time must be HH:MM (24-hour)"),
+  timezone: z.string().trim().min(1, "Timezone is required"),
+  subscription: z.object({
+    endpoint: z.string().url("Invalid subscription endpoint"),
+    keys: z.object({
+      p256dh: z.string().min(1, "Missing subscription key"),
+      auth: z.string().min(1, "Missing subscription key"),
+    }),
+  }),
+});
+
+export type ReminderSettingsInput = z.infer<typeof reminderSettingsSchema>;
+
+export const disableReminderSchema = z.object({
+  endpoint: z.string().url("Invalid subscription endpoint"),
+});
+
+export type DisableReminderInput = z.infer<typeof disableReminderSchema>;

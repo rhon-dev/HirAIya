@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
-import { moodEntrySchema, profileSchema, type MoodEntryInput, type ProfileInput } from "@/lib/validation";
+import { moodEntrySchema, profileSchema, reminderSettingsSchema, disableReminderSchema, type MoodEntryInput, type ProfileInput, type ReminderSettingsInput, type DisableReminderInput } from "@/lib/validation";
 import { todayUTC } from "@/lib/mood";
 
 export type ActionResult = { error: string } | undefined;
@@ -55,5 +55,56 @@ export async function updateProfile(input: ProfileInput): Promise<ActionResult> 
   });
 
   revalidatePath("/");
+  revalidatePath("/settings");
+}
+
+export async function saveReminderSettings(
+  input: ReminderSettingsInput
+): Promise<ActionResult> {
+  const parsed = reminderSettingsSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const user = await getCurrentUser();
+  const { time, timezone, subscription } = parsed.data;
+
+  await prisma.pushSubscription.upsert({
+    where: { endpoint: subscription.endpoint },
+    create: {
+      endpoint: subscription.endpoint,
+      p256dh: subscription.keys.p256dh,
+      auth: subscription.keys.auth,
+    },
+    update: {
+      p256dh: subscription.keys.p256dh,
+      auth: subscription.keys.auth,
+    },
+  });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { reminderEnabled: true, reminderTime: time, timezone },
+  });
+
+  revalidatePath("/settings");
+}
+
+export async function disableReminder(
+  input: DisableReminderInput
+): Promise<ActionResult> {
+  const parsed = disableReminderSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
+  }
+
+  const user = await getCurrentUser();
+  await prisma.pushSubscription.deleteMany({
+    where: { endpoint: parsed.data.endpoint },
+  });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { reminderEnabled: false },
+  });
+
   revalidatePath("/settings");
 }
