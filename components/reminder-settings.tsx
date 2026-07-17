@@ -11,10 +11,12 @@ type Props = {
   vapidPublicKey: string;
 };
 
-function urlBase64ToUint8Array(base64: string): Uint8Array {
+function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
   const padding = "=".repeat((4 - (base64.length % 4)) % 4);
   const raw = atob((base64 + padding).replace(/-/g, "+").replace(/_/g, "/"));
-  return Uint8Array.from(raw, (c) => c.charCodeAt(0));
+  const arr = new Uint8Array(new ArrayBuffer(raw.length));
+  for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+  return arr;
 }
 
 async function getCurrentSubscription(): Promise<PushSubscription | null> {
