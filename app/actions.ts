@@ -100,15 +100,21 @@ export async function disableReminder(
   }
 
   const user = await getCurrentUser();
-  await prisma.$transaction([
-    prisma.pushSubscription.deleteMany({
-      where: { endpoint: parsed.data.endpoint },
-    }),
+  const ops = [];
+  if (parsed.data.endpoint) {
+    ops.push(
+      prisma.pushSubscription.deleteMany({
+        where: { endpoint: parsed.data.endpoint },
+      })
+    );
+  }
+  ops.push(
     prisma.user.update({
       where: { id: user.id },
       data: { reminderEnabled: false },
-    }),
-  ]);
+    })
+  );
+  await prisma.$transaction(ops);
 
   revalidatePath("/settings");
 }

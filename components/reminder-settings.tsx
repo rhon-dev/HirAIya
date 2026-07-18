@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,11 +29,11 @@ export function ReminderSettings({ defaults, vapidPublicKey }: Props) {
   const [time, setTime] = useState(defaults.time);
   const [timezone, setTimezone] = useState(defaults.timezone);
   const [pending, startTransition] = useTransition();
+  const [supported, setSupported] = useState(false);
 
-  const supported =
-    typeof window !== "undefined" &&
-    "serviceWorker" in navigator &&
-    "PushManager" in window;
+  useEffect(() => {
+    setSupported("serviceWorker" in navigator && "PushManager" in window);
+  }, []);
 
   async function subscribeAndSave(): Promise<boolean> {
     const registration = await navigator.serviceWorker.register("/sw.js");
@@ -44,6 +44,7 @@ export function ReminderSettings({ defaults, vapidPublicKey }: Props) {
     });
     const json = subscription.toJSON();
     if (!json.endpoint || !json.keys?.p256dh || !json.keys?.auth) {
+      await subscription.unsubscribe();
       toast.error("Could not read the push subscription");
       return false;
     }
@@ -100,12 +101,10 @@ export function ReminderSettings({ defaults, vapidPublicKey }: Props) {
         const subscription = await getCurrentSubscription();
         const endpoint = subscription?.endpoint;
         if (subscription) await subscription.unsubscribe();
-        if (endpoint) {
-          const result = await disableReminder({ endpoint });
-          if (result?.error) {
-            toast.error(result.error);
-            return;
-          }
+        const result = await disableReminder(endpoint ? { endpoint } : {});
+        if (result?.error) {
+          toast.error(result.error);
+          return;
         }
         setEnabled(false);
         toast.success("Daily reminder disabled");

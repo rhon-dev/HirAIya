@@ -53,7 +53,7 @@ export const reminderSettingsSchema = z.object({
 export type ReminderSettingsInput = z.infer<typeof reminderSettingsSchema>;
 
 export const disableReminderSchema = z.object({
-  endpoint: z.string().url("Invalid subscription endpoint"),
+  endpoint: z.string().url("Invalid subscription endpoint").optional(),
 });
 
 export type DisableReminderInput = z.infer<typeof disableReminderSchema>;
