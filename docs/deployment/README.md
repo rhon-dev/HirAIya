@@ -42,6 +42,10 @@ daily-only): configure cron-job.org (free) to call
 `GET https://<deployment>/api/reminders/run?secret=<CRON_SECRET>` every hour, at
 minute 0. Non-200 responses count as failures in the cron dashboard.
 
+**Generate a fresh `CRON_SECRET` for production — do not reuse the local dev value**
+(`dev-cron-secret-change-in-prod` in local `.env`/this repo's docs is a placeholder,
+not a real secret; it must never be set in Vercel's environment variables).
+
 ## Incident log
 
 **2026-07-15 — production 500 on every route.**
